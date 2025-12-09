@@ -1,0 +1,276 @@
+
+None selected
+
+Skip to content
+Using Gmail with screen readers
+Enable desktop notifications for Gmail.   OK  No thanks
+Conversations
+	
+	
+	
+To: cscvle51@gm.
+	
+(no subject)
+ 
+Attachment:result.html
+Attachment:cutoff.html
+Attachment:index.html
+	
+	2:09 PM
+	
+10% of 15 GB used
+Terms · Privacy · Program Policies
+Last account activity: 7 minutes ago
+Details
+
+<!DOCTYPE html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CET Mains Cutoff by Post</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #020617;
+        color: #e5e7eb;
+        min-height: 100vh;
+        padding: 16px;
+      }
+      .wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 14px;
+      }
+      .header h1 {
+        margin: 4px 0;
+        font-size: 1.2rem;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: rgba(56, 189, 248, 0.12);
+        border: 1px solid rgba(56, 189, 248, 0.4);
+        font-size: 0.7rem;
+        color: #bae6fd;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .controls input,
+      .controls select {
+        flex: 1;
+        min-width: 140px;
+        padding: 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(75, 85, 99, 0.8);
+        background: #020617;
+        color: #e5e7eb;
+        font-size: 0.8rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.78rem;
+        background: #020617;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(75, 85, 99, 0.8);
+      }
+      th,
+      td {
+        padding: 6px 7px;
+        border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      }
+      th {
+        background: #0f172a;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.75rem;
+      }
+      tr:nth-child(even) td {
+        background: rgba(15, 23, 42, 0.9);
+      }
+      .chip {
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 0.7rem;
+        display: inline-block;
+      }
+      .chip-gen {
+        background: rgba(55, 65, 81, 0.84);
+      }
+      .chip-cat {
+        background: rgba(30, 64, 175, 0.8);
+      }
+      .chip-ews {
+        background: rgba(132, 204, 22, 0.8);
+        color: #021013;
+      }
+      .info {
+        font-size: 0.7rem;
+        color: #9ca3af;
+        margin-top: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="badge">HSSC CET Mains Cutoff by Post</div>
+        <h1>पोस्टवार कटऑफ (Category wise)</h1>
+      </div>
+
+      <div class="controls">
+        <input
+          type="text"
+          id="searchPost"
+          placeholder="Post Name / Code से search करें"
+        />
+        <select id="filterCategory">
+          <option value="">All Category</option>
+          <option value="GEN">GEN</option>
+          <option value="SC">SC</option>
+          <option value="BCA">BCA</option>
+          <option value="BCB">BCB</option>
+          <option value="EWS">EWS</option>
+        </select>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Post Code</th>
+            <th>Post Name</th>
+            <th>Category</th>
+            <th>Cutoff Marks</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody id="cutoffBody"></tbody>
+      </table>
+
+      <p class="info">
+        * यह data सिर्फ demo के लिए है। असली cutoff backend / sheet से
+        auto-load किया जा सकता है।
+      </p>
+    </div>
+
+    <script>
+      // 🔹 यहाँ demo cutoff data (तुम बाद में backend से भी ले सकते हो)
+      const cutoffData = [
+        {
+          postCode: "01",
+          postName: "Clerk",
+          category: "GEN",
+          cutoff: 74.50,
+          remarks: "General Open Merit",
+        },
+        {
+          postCode: "01",
+          postName: "Clerk",
+          category: "SC",
+          cutoff: 63.25,
+          remarks: "SC Haryana",
+        },
+        {
+          postCode: "01",
+          postName: "Clerk",
+          category: "BCA",
+          cutoff: 68.0,
+          remarks: "BCA Haryana",
+        },
+        {
+          postCode: "02",
+          postName: "Group D",
+          category: "GEN",
+          cutoff: 71.0,
+          remarks: "General",
+        },
+        {
+          postCode: "02",
+          postName: "Group D",
+          category: "EWS",
+          cutoff: 69.25,
+          remarks: "EWS Haryana",
+        },
+        {
+          postCode: "03",
+          postName: "Patwari",
+          category: "GEN",
+          cutoff: 76.75,
+          remarks: "UR",
+        },
+        {
+          postCode: "03",
+          postName: "Patwari",
+          category: "BCB",
+          cutoff: 72.0,
+          remarks: "BCB Haryana",
+        },
+      ];
+
+      const tbody = document.getElementById("cutoffBody");
+      const searchPost = document.getElementById("searchPost");
+      const filterCategory = document.getElementById("filterCategory");
+
+      function renderTable() {
+        const q = searchPost.value.trim().toLowerCase();
+        const cat = filterCategory.value;
+
+        tbody.innerHTML = "";
+
+        cutoffData
+          .filter((row) => {
+            const matchPost =
+              row.postName.toLowerCase().includes(q) ||
+              row.postCode.toLowerCase().includes(q);
+            const matchCat = !cat || row.category === cat;
+            return matchPost && matchCat;
+          })
+          .forEach((row) => {
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+            <td>${row.postCode}</td>
+            <td>${row.postName}</td>
+            <td>${renderCategoryChip(row.category)}</td>
+            <td>${row.cutoff}</td>
+            <td>${row.remarks || "-"}</td>
+          `;
+
+            tbody.appendChild(tr);
+          });
+      }
+
+      function renderCategoryChip(cat) {
+        let cls = "chip";
+        if (cat === "GEN") cls += " chip-gen";
+        else if (cat === "EWS") cls += " chip-ews";
+        else cls += " chip-cat";
+        return `<span class="${cls}">${cat}</span>`;
+      }
+
+      searchPost.addEventListener("input", renderTable);
+      filterCategory.addEventListener("change", renderTable);
+
+      renderTable();
+    </script>
+  </body>
+</html>
+
+cutoff.html
+Displaying cutoff.html.
