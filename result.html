@@ -359,7 +359,7 @@
       </button>
 
       <button
-  onclick="window.location.href='cutoff.html';"
+  onclick="openCutoffWithWhatsApp();"
   style="
     width:100%;
     margin-top:10px;
@@ -511,6 +511,24 @@
     const BACKEND_URL =
       "https://script.google.com/macros/s/AKfycbwHo7ecIYJP-ekEOfsCnD1BUtbSJ_nF6ZNZ2vi_hsQb6fyA0GBurHQTxWbPrm0DKZzOIQ/exec";
 
+    function openCutoffWithWhatsApp() {
+  // 1) WhatsApp channel new tab me open karo
+  try {
+    window.open(
+      "https://whatsapp.com/channel/0029Vb6kNhq8fewpVWfe1m1s",
+      "_blank"
+    );
+  } catch (e) {
+    console.log("WhatsApp open blocked:", e);
+  }
+
+  // 2) Thoda sa delay dekar current tab me cutoff.html open karo
+  setTimeout(function () {
+    window.location.href = "cutoff.html";
+  }, 700); // 700ms delay, chahe to 500 ya 1000 bhi kar sakte ho
+}
+
+    
     function getQueryParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
