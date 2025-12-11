@@ -25,15 +25,8 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.5);
       border: 1px solid #1f2937;
     }
-    h1 {
-      margin: 0 0 4px;
-      font-size: 22px;
-    }
-    .sub {
-      font-size: 13px;
-      color: #9ca3af;
-      margin-bottom: 16px;
-    }
+    h1 { margin: 0 0 4px; font-size: 22px; }
+    .sub { font-size: 13px; color: #9ca3af; margin-bottom: 16px; }
     .input-box {
       border-radius: 16px;
       border: 1px dashed #374151;
@@ -42,11 +35,7 @@
       margin-bottom: 16px;
       font-size: 13px;
     }
-    input[type="file"] {
-      width: 100%;
-      font-size: 13px;
-      color: #e5e7eb;
-    }
+    input[type="file"] { width: 100%; font-size: 13px; color: #e5e7eb; }
     button {
       width: 100%;
       padding: 10px 14px;
@@ -59,43 +48,34 @@
       cursor: pointer;
       margin-bottom: 8px;
     }
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
+    button:disabled { opacity: 0.6; cursor: default; }
+    .status { font-size: 12px; color: #a5b4fc; min-height: 18px; margin-top: 4px; }
+    .error { color: #fecaca; font-size: 12px; margin-top: 4px; min-height: 18px; }
+    .small { font-size: 11px; color: #9ca3af; margin-top: 10px; line-height: 1.5; }
+    .section { max-width: 480px; margin: 12px auto 0; font-size: 11px; color: #9ca3af; }
+    .section h2 { font-size: 12px; margin: 0 0 4px; color: #e5e7eb; }
+    .link { color: #38bdf8; text-decoration: none; font-weight: 500; }
+
+    /* new: manual roll input styles */
+    .manual-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      align-items: center;
     }
-    .status {
-      font-size: 12px;
-      color: #a5b4fc;
-      min-height: 18px;
-      margin-top: 4px;
-    }
-    .error {
-      color: #fecaca;
-      font-size: 12px;
-      margin-top: 4px;
-      min-height: 18px;
-    }
-    .small {
-      font-size: 11px;
-      color: #9ca3af;
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-    .section {
-      max-width: 480px;
-      margin: 12px auto 0;
-      font-size: 11px;
-      color: #9ca3af;
-    }
-    .section h2 {
-      font-size: 12px;
-      margin: 0 0 4px;
+    .manual-row input[type="text"] {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #071027;
       color: #e5e7eb;
+      font-size: 14px;
     }
-    .link {
-      color: #38bdf8;
-      text-decoration: none;
-      font-weight: 500;
+    .hint {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 6px;
     }
   </style>
 </head>
@@ -122,26 +102,26 @@
     <div class="status" id="statusText"></div>
     <div class="error" id="errorText"></div>
 
-    <div style="
-    margin-top:18px;
-    text-align:center;
-    font-size:14px;
-">
-  <a href="https://instagram.com/adv_kanha73" 
-     target="_blank" 
-     style="text-decoration:none; color:#f9fafb; display:inline-flex; align-items:center; gap:6px;">
-
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" 
-         alt="Instagram" 
-         style="width:20px; height:20px; border-radius:4px;" />
-
-    <span style="font-weight:600;">@adv_kanha73</span>
-  </a>
-</div>
-
-      <br />
-      Note: गलत / Blank / Non-HSSC PDF अपलोड करने पर एरर दिखेगा।
+    <!-- NEW: Manual roll entry so previously-uploaded users can directly view result -->
+    <div style="margin-top:12px; padding-top:12px; border-top:1px dashed #26303a;">
+      <div style="font-weight:600; margin-bottom:6px;">पहले अपलोड कर चुका हूँ — सीधे Result देखें</div>
+      <div class="manual-row">
+        <input type="text" id="manualRoll" placeholder="अपना Roll number दर्ज करें (उदा. 5325003383)" />
+        <button id="goResultBtn" onclick="handleManualGo()">Go</button>
+      </div>
+      <div class="hint">यदि आप पहले PDF अपलोड कर चुके है तो आप सीधा रोल नंबर डाल कर अपनी रैंक और कटऑफ देख सकते है ।
+सभी प्रकार की updates के लिए whatsapp  channel को फॉलो करे बाद में ये चैनल आपके बहुत काम आएगा। </div>
     </div>
+
+    <div style="margin-top:18px; text-align:center; font-size:14px;">
+      <a href="https://instagram.com/adv_kanha73" target="_blank" style="text-decoration:none; color:#f9fafb; display:inline-flex; align-items:center; gap:6px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width:20px; height:20px; border-radius:4px;" />
+        <span style="font-weight:600;">@adv_kanha73</span>
+      </a>
+    </div>
+
+    <br />
+    <div class="small">Note: गलत / Blank / Non-HSSC PDF अपलोड करने पर एरर दिखेगा।</div>
   </div>
 
   <!-- Disclaimer + Terms -->
@@ -164,8 +144,13 @@
   </div>
 
   <script>
+    // Backend URL (आपके Apps Script endpoint)
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwHo7ecIYJP-ekEOfsCnD1BUtbSJ_nF6ZNZ2vi_hsQb6fyA0GBurHQTxWbPrm0DKZzOIQ/exec";
 
+    // WhatsApp channel URL (पहले channel join करवाने के लिए)
+    const WHATSAPP_CHANNEL_URL = "https://whatsapp.com/channel/0029Vb6kNhq8fewpVWfe1m1s";
+
+    // pdf.js worker
     if (window["pdfjsLib"]) {
       pdfjsLib.GlobalWorkerOptions.workerSrc =
         "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -174,9 +159,10 @@
     const statusEl = document.getElementById("statusText");
     const errorEl = document.getElementById("errorText");
     const uploadBtn = document.getElementById("uploadBtn");
+    const goResultBtn = document.getElementById("goResultBtn");
 
-    function setStatus(msg) { statusEl.textContent = msg || ""; }
-    function setError(msg)  { errorEl.textContent = msg || ""; }
+    function setStatus(msg) { if (statusEl) statusEl.textContent = msg || ""; }
+    function setError(msg)  { if (errorEl) errorEl.textContent = msg || ""; }
 
     async function extractTextFromPDF(file) {
       const arrayBuffer = await file.arrayBuffer();
@@ -238,6 +224,19 @@
              d.dob && d.category && d.cet_marks;
     }
 
+    // Opens WhatsApp channel in new tab and after a delay navigates current tab to given URL
+    function openWhatsAppThenNavigate(targetUrl, delay = 700) {
+      try {
+        window.open(WHATSAPP_CHANNEL_URL, "_blank");
+      } catch (e) {
+        console.log("WhatsApp open blocked:", e);
+      }
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, delay);
+    }
+
+    // Upload handler (unchanged behavior, but uses openWhatsAppThenNavigate)
     async function handleUpload() {
       setStatus("");
       setError("");
@@ -279,6 +278,7 @@
         setStatus("Backend में सेव करने की request भेज दी गई है...");
 
         try {
+          // send to backend (no-cors used previously; if backend supports CORS, better to remove no-cors)
           fetch(BACKEND_URL, {
             method: "POST",
             mode: "no-cors",
@@ -290,22 +290,12 @@
           console.log("Fetch throw हुआ:", e);
         }
 
+        // Open WhatsApp first, then navigate to result page with roll
+        const target = `result.html?roll=${encodeURIComponent(user.roll)}`;
+        // small delay to let UI update
         setTimeout(() => {
-  // 1) WhatsApp Channel नई tab में open करो
-  try {
-    window.open(
-      "https://whatsapp.com/channel/0029Vb6kNhq8fewpVWfe1m1s",
-      "_blank"
-    );
-  } catch (e) {
-    console.log("Popup blocked:", e);
-  }
-
-  // 2) थोड़े delay के बाद result.html open करो
-  setTimeout(() => {
-    window.location.href = `result.html?roll=${encodeURIComponent(user.roll)}`;
-  }, 1000); // delay adjust कर सकते हो
-}, 200);
+          openWhatsAppThenNavigate(target, 900); // 900ms so user sees whatsapp open
+        }, 200);
 
       } catch (err) {
         console.error(err);
@@ -314,8 +304,45 @@
         uploadBtn.disabled = false;
       }
     }
+
+    // Manual roll -> open WhatsApp then result
+    function handleManualGo() {
+      setError("");
+      setStatus("");
+
+      const rollInput = document.getElementById("manualRoll");
+      if (!rollInput) return;
+      const roll = rollInput.value.trim();
+      if (!roll) {
+        setError("कृपया Roll number डालें।");
+        return;
+      }
+      // basic check: digits only (adjust as per your real roll format)
+      if (!/^\d{6,12}$/.test(roll)) {
+        setError("Roll format सही नहीं लग रहा। केवल digits डालें (6-12 अंक)।");
+        return;
+      }
+
+      setStatus("Redirecting to result...");
+
+      const target = `result.html?roll=${encodeURIComponent(roll)}`;
+      openWhatsAppThenNavigate(target, 700);
+    }
+
+    // Optional: allow Enter key on manualRoll input
+    document.addEventListener("DOMContentLoaded", () => {
+      const r = document.getElementById("manualRoll");
+      if (r) {
+        r.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            handleManualGo();
+          }
+        });
+      }
+    });
   </script>
-  
+
   <footer style="
     background:#000;
     color:#fff;
@@ -345,6 +372,5 @@
     </div>
 </footer>
 
-  
 </body>
 </html>
