@@ -45,6 +45,20 @@ th{background:#111827}
 
 <div class="grid" id="kpis"></div>
 
+<h3>📅 Date-wise Analytics</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Date</th>
+  <th>Attempts</th>
+  <th>Avg Score</th>
+  <th>Avg Time (sec)</th>
+</tr>
+</thead>
+<tbody id="dateRows"></tbody>
+</table>
+
 <h3>🏆 Top Scorers</h3>
 <table>
 <thead>
@@ -94,6 +108,25 @@ fetch(`${BACKEND_URL}?action=topScorers`)
   list.forEach(r=>{
     t.innerHTML += `
       <tr><td>${r.rank}</td><td>${r.name}</td><td>${r.score}</td></tr>
+    `;
+  });
+});
+
+  /* fetch Date-wise Analytics */
+fetch(`${BACKEND_URL}?action=dateAnalytics`)
+.then(r=>r.json())
+.then(list=>{
+  const tbody = document.getElementById("dateRows");
+  tbody.innerHTML = "";
+
+  list.forEach(d=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${d.date}</td>
+        <td>${d.attempts}</td>
+        <td>${d.avgScore}</td>
+        <td>${d.avgTime}</td>
+      </tr>
     `;
   });
 });
