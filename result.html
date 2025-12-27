@@ -332,7 +332,22 @@
      data-ad-format="auto"></ins>
 <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
   </head>
-<body>
+
+  <body>
+    <script>
+/* ===== RESULT PAGE AUTO MODE GUARD ===== */
+(function(){
+  const p = new URLSearchParams(location.search);
+  if (!p.has("mode")) {
+    if (p.has("roll")) {
+      p.set("mode","result");
+    } else {
+      p.set("mode","safe");
+    }
+    history.replaceState({}, "", location.pathname + "?" + p.toString());
+  }
+})();
+</script>
 
 <!-- ===== MAIN CONTENT ===== -->
 
