@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leaderboard</title>
+
+<style>
+body{
+  font-family:system-ui;
+  background:#020617;
+  color:#e5e7eb;
+  padding:14px;
+}
+.card{
+  max-width:700px;
+  margin:auto;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:14px;
+  padding:14px;
+}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px;border-bottom:1px solid #334155}
+th{background:#111827}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>🏆 CET Test Leaderboard</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Rank</th>
+  <th>Name</th>
+  <th>Score</th>
+</tr>
+</thead>
+<tbody id="rows"></tbody>
+</table>
+</div>
+
+<script>
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbykOLwPfiZPECfydtBY-H2o1UgBE0E9bf3tNHeuyVuzPL2N8C5RsADOD8CTin1RASb9/exec";
+const TEST_ID = 1;
+
+fetch(`${BACKEND_URL}?action=leaderboard&testId=${TEST_ID}`)
+.then(r=>r.json())
+.then(data=>{
+  const tbody = document.getElementById("rows");
+  tbody.innerHTML="";
+  data.forEach(r=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${r.rank}</td>
+        <td>${r.name}</td>
+        <td>${r.score}</td>
+      </tr>
+    `;
+  });
+});
+</script>
+
+</body>
+</html>
