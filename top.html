@@ -40,6 +40,16 @@
   </head>
 
   <body>
+    <script>
+/* ===== TOP PAGE AUTO MODE GUARD ===== */
+(function(){
+  const p = new URLSearchParams(location.search);
+  if (!p.has("mode")) {
+    p.set("mode","top");
+    history.replaceState({}, "", location.pathname + "?" + p.toString());
+  }
+})();
+</script>
     <div class="wrapper">
       <div class="header">
         <h1>Top 100 CET — Category-wise</h1>
@@ -195,7 +205,8 @@
     const limit = Number(limitEl.value) || 100;
 
     const params = new URLSearchParams();
-    params.set('mode','top_list');
+    params.set('mode','top');
+    params.set('list','top_list'); // optional info
     params.set('category',cat);
     params.set('limit',String(limit));
 
