@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel – CET Test</title>
+
+<!-- pdf.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+body{
+  font-family:system-ui;
+  background:#020617;
+  color:#e5e7eb;
+  padding:15px;
+}
+.card{
+  max-width:900px;
+  margin:auto;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:14px;
+  padding:15px;
+}
+h2{margin-top:0}
+input, textarea, select{
+  width:100%;
+  margin:6px 0;
+  padding:8px;
+  background:#020617;
+  color:#e5e7eb;
+  border:1px solid #334155;
+  border-radius:8px;
+}
+button{
+  margin-top:8px;
+  padding:10px 16px;
+  border:none;
+  border-radius:999px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+}
+.section{
+  margin-top:20px;
+  padding-top:10px;
+  border-top:1px dashed #334155;
+}
+.hidden{display:none}
+.status{margin-top:8px;color:#9ca3af}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>🔐 Admin Panel – CET Test</h2>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginBox">
+  <input type="password" id="adminPass" placeholder="Admin Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- ===== PANEL ===== -->
+<div id="panel" class="hidden">
+
+  <!-- MANUAL ENTRY -->
+  <div class="section">
+    <h3>✍️ Manual Question Entry</h3>
+
+    <textarea id="q" placeholder="Question"></textarea>
+    <input id="a" placeholder="Option A">
+    <input id="b" placeholder="Option B">
+    <input id="c" placeholder="Option C">
+    <input id="d" placeholder="Option D">
+
+    <select id="correct">
+      <option value="A">Correct: A</option>
+      <option value="B">Correct: B</option>
+      <option value="C">Correct: C</option>
+      <option value="D">Correct: D</option>
+    </select>
+
+    <button onclick="saveManual()">Save Question</button>
+    <div class="status" id="manualStatus"></div>
+  </div>
+
+  <!-- PDF UPLOAD -->
+  <div class="section">
+    <h3>📄 PDF Upload (Auto Quiz)</h3>
+
+    <input type="file" id="pdfFile" accept="application/pdf">
+    <button onclick="processPDF()">Upload & Extract</button>
+
+    <div class="status" id="pdfStatus"></div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+const BACKEND_URL = "PASTE_YOUR_BACKEND_URL_HERE";
+const ADMIN_PASSWORD = "kanhaiya@123"; // change later
+
+/* ===== LOGIN ===== */
+function login(){
+  const pass = document.getElementById("adminPass").value;
+  if(pass === ADMIN_PASSWORD){
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("panel").classList.remove("hidden");
+    sessionStorage.setItem("admin","yes");
+  }else{
+    alert("Wrong password");
+  }
+}
+
+/* ===== MANUAL SAVE ===== */
+function saveManual(){
+  const data = {
+    mode:"manual",
+    question:q.value,
+    A:a.value, B:b.value, C:c.value, D:d.value,
+    correct:correct.value
+  };
+
+  fetch(BACKEND_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    manualStatus.textContent = "✅ Question saved";
+    q.value=a.value=b.value=c.value=d.value="";
+  })
+  .catch(()=> manualStatus.textContent="❌ Error");
+}
+
+/* ===== PDF PROCESS ===== */
+async function processPDF(){
+  const file = pdfFile.files[0];
+  if(!file){ alert("Select PDF"); return; }
+
+  pdfStatus.textContent="Reading PDF...";
+
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+
+  let text="";
+  for(let i=1;i<=pdf.numPages;i++){
+    const p = await pdf.getPage(i);
+    const c = await p.getTextContent();
+    text += c.items.map(it=>it.str).join(" ")+"\n";
+  }
+
+  const questions = extractMCQ(text);
+
+  if(!questions.length){
+    pdfStatus.textContent="❌ No MCQ found";
+    return;
+  }
+
+  fetch(BACKEND_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      mode:"pdf",
+      questions:questions
+    })
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    pdfStatus.textContent = "✅ Added "+res.added+" questions";
+  })
+  .catch(()=> pdfStatus.textContent="❌ Upload error");
+}
+
+/* ===== MCQ EXTRACTOR ===== */
+function extractMCQ(text){
+  const out=[];
+  const re=/Q\d+[\.\)]\s*(.*?)\s*A[\.\)]\s*(.*?)\s*B[\.\)]\s*(.*?)\s*C[\.\)]\s*(.*?)\s*D[\.\)]\s*(.*?)(?=Q\d+|$)/gis;
+  let m;
+  while((m=re.exec(text))!==null){
+    out.push({
+      question:m[1],
+      A:m[2], B:m[3], C:m[4], D:m[5],
+      correct:"" // optional
+    });
+  }
+  return out;
+}
+</script>
+
+</body>
+</html>
